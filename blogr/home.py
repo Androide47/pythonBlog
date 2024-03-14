@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 bp = Blueprint('home', __name__)
 
@@ -6,16 +6,16 @@ bp = Blueprint('home', __name__)
 
 @bp.route('/')
 def index():
-    return 'Pagina de inicio'
+    return render_template('index.html')
 
 @bp.route('/blog')
 def blog():
-    return 'Pagina de blog'
+    return render_template('blog.html')
 
-@bp.route('/auth')
-def auth():
-    return 'Pagina de autenticación'
+# @bp.route('/base')
+# def auth():
+#     return render_template('base.html')
 
-@bp.route('/post')
-def post():
-    return 'Pagina de post'
+# @bp.route('/post')
+# def post():
+#     return 'Pagina de post'
