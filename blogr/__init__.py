@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy
+db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
@@ -19,4 +19,8 @@ def create_app():
     from blogr import post
     app.register_blueprint(post.bp)
 
+    from .models import User, Post
+    
+    with app.app_context():
+        db.create_all()
     return app

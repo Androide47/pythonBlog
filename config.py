@@ -1,7 +1,9 @@
 SQLITE = "sqlite:///project.db"
-POSTGRES = "posgresql+psycopg2://postgre:root@localhost:5432/Fix"
+POSTGRES = 'postgresql+psycopg2://postgres:root@localhost:5432/blog_python'
 
 class Config:
     DEBUG = True
     SECRET_KEY = 'dev'
     SQLALCHEMY_DATABASE_URI = POSTGRES
+
+#    SQLALCHEMY_TRACK_MODIFICATIONS = False
