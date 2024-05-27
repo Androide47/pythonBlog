@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from blogr import db
 
 class User(db.Model):
@@ -21,12 +21,12 @@ class User(db.Model):
 class Post(db.Model):
     __table__name = 'post'
     id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.Integer, db.ForeinKey('users.id'), nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     url = db.Column(db.String(100), unique = True, nullable=False)
     title = db.Column(db.String(100), nullable=False)
     info = db.Column(db.Text)
     content = db.Column(db.Text)
-    create = db.Coluumn(db.DateTime, nullable=False, default=datetime.utcnow)
+    create = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 def __init__(self, author, url, title, info, content) -> None:
     self.author = author
