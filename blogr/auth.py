@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, url_for, redirect, flash
-from werkzeug.security import generate_password_hash
+from flask import Blueprint, render_template, request, url_for, redirect, flash, session, g
+from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from blogr import db
 
@@ -12,50 +12,57 @@ def register():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # Data validation
-        if not username:
-            flash('Username is required', 'error')
-            return render_template('auth/register.html')
-        
-        if not email:
-            flash('Email is required', 'error')
-            return render_template('auth/register.html')
-        
-        if not password:
-            flash('Password is required', 'error')
-            return render_template('auth/register.html')
+        user = User(username, email, generate_password_hash(password))
 
-        # Check if the email already exists
-        user_email = User.query.filter_by(email=email).first()
-        if user_email is not None:
-            flash('Email is already registered', 'error')
-            return render_template('auth/register.html')
+        error = None
 
-        # Check if the username already exists
-        user_username = User.query.filter_by(username=username).first()
-        if user_username is not None:
-            flash('Username is already taken', 'error')
-            return render_template('auth/register.html')
-
-        # Create a new user
-        user = User(username=username, email=email, password=generate_password_hash(password))
-        
-        try:
+        user_mail = User.query.filter_by(email=email).first()
+        if user_mail == None:
             db.session.add(user)
             db.session.commit()
-            flash('Registration successful! Please log in.', 'success')
             return redirect(url_for('auth.login'))
-        except Exception as e:
-            db.session.rollback()
-            flash(f'An error occurred: {e}', 'error')
-            return render_template('auth/register.html')
+        else:
+            error = f'El correo {email} ya se encuentra registrado'
+            flash(error)
 
-    return render_template('auth/register.html')
+
+    return render_template('auth/register.html') 
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    # Implement login functionality here
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        error = None
+        user = User.query.filter_by(email=email).first()
+
+        if user == None or not check_password_hash(user.password, password):
+            error = 'El nombre de usuario o la contraseña son incorrectos'
+            flash(error)
+
+        if error is None:
+            session.clear()
+            session['user_id'] = user.id
+            return redirect(url_for('post.posts'))
+
+        flash(error)
+
     return render_template('auth/login.html')
+
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = User.query.get_or_404(user_id)
+
+@bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('auth.login'))
 
 @bp.route('/profile')
 def profile():

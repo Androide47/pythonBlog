@@ -5,8 +5,8 @@ bp = Blueprint('post', __name__, url_prefix='/post')
 
 
 @bp.route('/post')
-def post():
-    return 'Pagina de login'
+def posts():
+    return 'Pagina de post'
 
 @bp.route('/create')
 def create():
