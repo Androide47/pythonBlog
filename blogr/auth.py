@@ -62,9 +62,28 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('home.index'))
 
-@bp.route('/profile')
-def profile():
-    # Implement profile functionality here
-    return render_template('auth/profile.html')
+@bp.route('/profile/<int:id>', methods=('GET', 'POST'))
+def profile(id):
+    user = User.query.get_or_404(id)
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        error = None
+        if len(password) != 0:
+            user.password = generate_password_hash(password)
+        elif len(password) > 0 and leb(password) > 6:
+            error = 'La contraseña debe ser mayor a 6 caracteres'
+        
+        if error is not None:
+            flash(error)
+        else:
+            db.session.commit()
+            return redirect(url_for('auth.profile'))
+        flash(error)
+     
+
+    return render_template('auth/profile.html', user=user)
