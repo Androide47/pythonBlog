@@ -1,4 +1,4 @@
-#!/Users/andreiortega/Documents/PythonWorkSpace/pythonBlog/env-blog/bin/python3.12
+#!/home/androide47/Documents/GitHub/pythonBlog/env-blog/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
