@@ -10,6 +10,9 @@ def create_app():
 
     db.init_app(app)
 
+    from flask_ckeditor import CKEditor
+    ckeditor = CKEditor(app)
+
     from blogr import home
     app.register_blueprint(home.bp)
 

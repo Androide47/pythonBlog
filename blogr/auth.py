@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, url_for, redirect, flash,
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from blogr import db
+import functools
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -59,24 +60,24 @@ def load_logged_in_user():
     else:
         g.user = User.query.get_or_404(user_id)
 
+
 @bp.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('home.index'))
 from werkzeug.utils import secure_filename
 
-def getphoto(id):
-    user = User.query.get_or_404(id)
-    photo = None
-    if photo != None:
-        photo = user.photo
-
-    return photo
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+        return view(**kwargs)
+    return wrapped_view
 
 @bp.route('/profile/<int:id>', methods=('GET', 'POST'))
 def profile(id):
     user = User.query.get_or_404(id)
-    photo = getphoto(id)
 
     if request.method == 'POST':
         user.username = request.form.get('username')
@@ -101,4 +102,4 @@ def profile(id):
         flash(error)
      
 
-    return render_template('auth/profile.html', user=user, photo=photo)
+    return render_template('auth/profile.html', user=user)
