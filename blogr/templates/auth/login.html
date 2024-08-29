@@ -8,10 +8,14 @@
 
 {%endblock%}
 
-<body>
+
   {%block header%} {%endblock%}
+
+
   <!-- Login -->
-  <main class="form-signin w-100 m-auto text-center">
+   <section class="login">
+
+     <main class="form-signin w-100 m-auto text-center">
     <img class="mb-4" src="../img/bp-dark.png" alt="" width="72" />
     <h1 class="h3 mb-3 fw-normal">{%block title%}Iniciar sesión{%endblock%}</h1>
     <form method="POST" action="{{ url_for('auth.login') }}">
@@ -51,8 +55,8 @@
       <a href="{{url_for('auth.register')}}">Crear cuenta</a>
     </p>
   </main>
+   </section>
+ 
 
-  <script src="../js/bootstrap.bundle.min.js"></script>
-</body>
 
 {%endblock%}

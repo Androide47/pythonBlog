@@ -1,15 +1,24 @@
-{%extends 'base.html'%} {%block header%}{%endblock%} {%block content%}
+{%extends 'base.html'%}  {%block content%}
 <div class="container">
-  <form method="POST">
-    <div class="row mt-5">
+    <form method="POST" class="row mt-5" enctype="multipart/form-data">
       <div class="col-md-4">
         <div class="text-center">
+          {% if user.photo is none %}
           <img
             src="{{url_for('static', filename='img/user-dark.png')}}"
             width="100"
             class="profile-image rounded-circle mb-2"
             alt="Foto de perfil"
           />
+          {%else%}
+          <img
+            src="{{url_for('static', filename=user.photo)}}"
+            width="100"
+            class="profile-image rounded-circle mb-2"
+            alt="Foto de perfil"
+          />
+
+          {%endif%}
           <div class="mb-3">
             <input type="file" id="photo" name="photo" class="form-control" />
           </div>
@@ -41,7 +50,7 @@
           />
         </div>
         <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
+          <label for="password" class="form-label">Cambiar contraseña</label>
           <input
             type="password"
             class="form-control"
@@ -51,7 +60,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
       </div>
-    </div>
   </form>
 </div>
 

@@ -63,27 +63,42 @@ def load_logged_in_user():
 def logout():
     session.clear()
     return redirect(url_for('home.index'))
+from werkzeug.utils import secure_filename
+
+def getphoto(id):
+    user = User.query.get_or_404(id)
+    photo = None
+    if photo != None:
+        photo = user.photo
+
+    return photo
 
 @bp.route('/profile/<int:id>', methods=('GET', 'POST'))
 def profile(id):
     user = User.query.get_or_404(id)
+    photo = getphoto(id)
 
     if request.method == 'POST':
-        username = request.form.get('username')
+        user.username = request.form.get('username')
         password = request.form.get('password')
 
         error = None
         if len(password) != 0:
             user.password = generate_password_hash(password)
-        elif len(password) > 0 and leb(password) > 6:
+        elif len(password) > 0 and len(password) > 6:
             error = 'La contraseña debe ser mayor a 6 caracteres'
+
+        if request.files['photo']:
+            photo = request.files['photo']
+            photo.save(f'blogr/static/media/{secure_filename(photo.filename)}')
+            user.photo = f'media/{secure_filename(photo.filename)}'
         
         if error is not None:
             flash(error)
         else:
             db.session.commit()
-            return redirect(url_for('auth.profile'))
+            return redirect(url_for('auth.profile', id=user.id))
         flash(error)
      
 
-    return render_template('auth/profile.html', user=user)
+    return render_template('auth/profile.html', user=user, photo=photo)
