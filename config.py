@@ -1,5 +1,5 @@
 SQLITE = "sqlite:///project.db"
-POSTGRES = 'postgresql+psycopg2://postgres:password@localhost:5432/blogpost_db'
+POSTGRES = 'postgresql+psycopg2://postgres:admin@localhost:5432/blogpost_db'
 
 class Config:
     DEBUG = True
