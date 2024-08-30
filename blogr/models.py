@@ -19,21 +19,23 @@ class User(db.Model):
     
 
 class Post(db.Model):
-    __table__name = 'post'
+    __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    url = db.Column(db.String(100), unique = True, nullable=False)
+    url = db.Column(db.String(100), unique=True, nullable=False)
     title = db.Column(db.String(100), nullable=False)
     info = db.Column(db.Text)
     content = db.Column(db.Text)
-    create = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    create_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-def __init__(self, author, url, title, info, content) -> None:
-    self.author = author
-    self.url = url
-    self.title = title
-    self.info = info
-    self.content = content
+    # Make sure __init__ is indented inside the class
+    def __init__(self, author, url, title, info, content) -> None:
+        self.author = author
+        self.url = url
+        self.title = title
+        self.info = info
+        self.content = content
 
-def __repr__(self) -> str:
-    return f'Post {self.title}'
+
+    def __repr__(self) -> str:
+        return f'Post {self.title}'
