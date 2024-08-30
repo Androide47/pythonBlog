@@ -51,7 +51,18 @@ def update(id):
         post.info = request.form.get('info')
         post.content = request.form.get('ckeditor')
 
-        db.sesion.commit()
+        db.session.commit()
         flash(f'Blog {post.title} actualizado con exito')
         return redirect(url_for('post.posts'))
     return render_template('admin/update.html', post=post)
+
+
+@bp.route('/delete/<int:id>')
+@login_required
+def delete(id):
+    post = Post.query.get_or_404(id)
+    db.session.delete(post)
+    db.session.commit()
+    flash(f'Blog {post.title} eliminado con exito')
+
+    return redirect(url_for('post.posts'))
