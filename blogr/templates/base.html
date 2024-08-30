@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <link rel="shortcut icon" href="{{url_for('static', filename='img/bp-light.png')}}" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="{{url_for('static', filename='img/bp-light.png')}}"
+      type="image/x-icon"
+    />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -52,7 +56,7 @@
             class="link-light text-decoration-none dropdown-toggle"
             data-bs-toggle="dropdown"
           >
-          {% if g.user.photo is none %}
+            {% if g.user.photo is none %}
             <img
               src="{{ url_for('static', filename='img/user-light.png') }}"
               alt="mdo"
@@ -60,7 +64,7 @@
               height="32"
               class="rounded-circle"
             />
-          {%else%}
+            {%else%}
             <img
               src="{{ url_for('static', filename=g.user.photo) }}"
               alt="mdo"
@@ -68,7 +72,7 @@
               height="32"
               class="rounded-circle"
             />
-          {%endif%}
+            {%endif%}
           </a>
           <ul class="dropdown-menu text-small">
             <li>
@@ -103,9 +107,7 @@
                 class="dropdown-item d-flex align-items-center gap-2 py-2"
                 href="{{ url_for('auth.profile', id=g.user.id) }}"
               >
-                <span
-                  class="d-inline-block bg-info rounded-circle p-1"
-                ></span>
+                <span class="d-inline-block bg-info rounded-circle p-1"></span>
                 Perfil
               </a>
             </li>
@@ -132,17 +134,48 @@
     <div class="container mt-3">
       <div class="row">
         <div class="col-md-6 mx-auto">
-          <div class="alert {% block message %} alert-danger {% endblock %}"   role="alert">
+          <div
+            class="alert {% block message %} alert-danger {% endblock %}"
+            role="alert"
+          >
             {{ message }}
           </div>
         </div>
       </div>
     </div>
     {% endfor %}
-    
+
     <!-- Sección de contenido -->
     {% block content %}{%endblock%}
-
+    <footer class="footer mt-auto py-3 bg-dark text-white">
+      <div class="container">
+        <div class="text-center">
+          <div class="d-flex py-3">
+            <img
+              src="{{ url_for('static', filename='img/bp-light.png') }}"
+              alt="blog posts"
+              width="40"
+            />
+            <p class="text-center">Blog de escritura</p>
+          </div>
+          <div class="d-flex py-3">
+            <p class="text-center">
+              © 2022 BlogPosts. Todos los derechos reservados.
+            </p>
+          </div>
+          <div class="d-flex py-3">
+            <p class="text-center">
+              Creado por: <a href="https://github.com/androide47">Androide47</a>
+            </p>
+            <p class="text-center">
+              Diseñado por:
+              <a href="https://github.com/erickgutierrez">Erick Gutierrez</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Bootstrap JS -->
     <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
     {{ ckeditor.load() }}
   </body>
